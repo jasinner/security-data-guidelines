@@ -19003,6 +19003,21 @@
           "comment": "sigmd5: 20369982b93b4710c630a5032a887938"
         }
       ]
+    },
+    {
+      "SPDXID": "SPDXRef-OpenShift-Pipelines-1.15-RHEL-8",
+      "name": "Red Hat OpenShift Pipelines",
+      "versionInfo": "1.15-RHEL-8",
+      "supplier": "Organization: Red Hat",
+      "downloadLocation": "NOASSERTION",
+      "licenseConcluded": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "SECURITY",
+          "referenceLocator": "cpe:/a:redhat:openshift_pipelines:1.15::el8",
+          "referenceType": "cpe22Type"
+        }
+      ]
     }
   ],
   "files": [
@@ -24107,6 +24122,11 @@
       "spdxElementId": "SPDXRef-aarch64-openshift-pipelines-client-redistributable",
       "relationshipType": "GENERATED_FROM",
       "relatedSpdxElement": "SPDXRef-SRPM"
+    },
+    {
+      "spdxElementId": "SPDXRef-SRPM",
+      "relationshipType": "PACKAGE_OF",
+      "relatedSpdxElement": "SPDXRef-OpenShift-Pipelines-1.15-RHEL-8"
     }
   ]
 }

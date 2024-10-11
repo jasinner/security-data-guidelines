@@ -1550,6 +1550,51 @@
           "comment": "sigmd5: 879e4c4ba7c890c9fba001534ea552b5"
         }
       ]
+    },
+    {
+      "SPDXID": "SPDXRef-AppStream-9.2.0.Z.EUS",
+      "name": "Red Hat Enterprise Linux",
+      "versionInfo": "9.2.0.Z.EUS",
+      "supplier": "Organization: Red Hat",
+      "downloadLocation": "NOASSERTION",
+      "licenseConcluded": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "SECURITY",
+          "referenceLocator": "cpe:/a:redhat:rhel_eus:9.2::appstream",
+          "referenceType": "cpe22Type"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-BaseOS-9.2.0.Z.EUS",
+      "name": "Red Hat Enterprise Linux",
+      "versionInfo": "9.2.0.Z.EUS",
+      "supplier": "Organization: Red Hat",
+      "downloadLocation": "NOASSERTION",
+      "licenseConcluded": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "SECURITY",
+          "referenceLocator": "cpe:/o:redhat:rhel_eus:9.2::baseos",
+          "referenceType": "cpe22Type"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-BaseOS-9.2.0.Z.E4S",
+      "name": "Red Hat Enterprise Linux",
+      "versionInfo": "9.2.0.Z.E4S",
+      "supplier": "Organization: Red Hat",
+      "downloadLocation": "NOASSERTION",
+      "licenseConcluded": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "SECURITY",
+          "referenceLocator": "cpe:/o:redhat:rhel_e4s:9.2::baseos",
+          "referenceType": "cpe22Type"
+        }
+      ]
     }
   ],
   "files": [],
@@ -1743,6 +1788,21 @@
       "spdxElementId": "SPDXRef-s390x-openssl-perl",
       "relationshipType": "GENERATED_FROM",
       "relatedSpdxElement": "SPDXRef-SRPM"
+    },
+    {
+      "spdxElementId": "SPDXRef-SRPM",
+      "relationshipType": "PACKAGE_OF",
+      "relatedSpdxElement": "SPDXRef-AppStream-9.2.0.Z.EUS"
+    },
+    {
+      "spdxElementId": "SPDXRef-SRPM",
+      "relationshipType": "PACKAGE_OF",
+      "relatedSpdxElement": "SPDXRef-BaseOS-9.2.0.Z.EUS"
+    },
+    {
+      "spdxElementId": "SPDXRef-SRPM",
+      "relationshipType": "PACKAGE_OF",
+      "relatedSpdxElement": "SPDXRef-BaseOS-9.2.0.Z.E4S"
     }
   ]
 }
