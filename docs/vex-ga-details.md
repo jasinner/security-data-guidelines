@@ -2,8 +2,6 @@
 
 This document is intended to cover the changes made in the new release of GA VEX files compared to the legacy VEX files. These changes are broken out by the three main CSAF VEX document sections: Document, Product Tree and Vulnerabilities. 
 
-++ Please Note: ++ The GA VEX files may experience minor changes as we address any final known issues. We aim to keep this documentation in sync with the changes, but there may be times when the documentation and implementation are not aligned. If you have questions on any of these changes, please see [How to Provide Feedback](https://redhatproductsecurity.github.io/security-data-guidelines/vex-GA-details/#how-to-provide-feedback).
-
 ## Document Section
 
 The new GA VEX files include a few minor changes to the `document` section, outlined in the sections below. 
@@ -307,7 +305,6 @@ In new GA VEX files for [CVE-2023-26819](https://security.access.redhat.com/data
 },
 
 ```
-
 
 ### Component Changes
 

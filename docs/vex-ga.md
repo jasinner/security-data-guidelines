@@ -15,7 +15,7 @@ This new release focuses on data precision and standardizing our CSAF VEX format
 - **Streamlined Content**: We’ve removed unrequired fields (duplicate titles, redundant CVSS scores, unnecessary note objects) and ensured `fixed` product and components no longer appear in `workaround` remediation objects.
 - **Modernized Infrastructure**: We have migrated VEX publication to a completely new service that improves performance and supportability.
 
-More detailed information on the differences between legacy VEX files and GA VEX files will be found [here](https://redhatproductsecurity.github.io/security-data-guidelines/vex-GA-details/).
+More detailed information on the differences between legacy VEX files and GA VEX files will be found [here](https://redhatproductsecurity.github.io/security-data-guidelines/vex-ga-details/).
 
 ### Bugs Fixed in GA Release
 
