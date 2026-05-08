@@ -1,18 +1,18 @@
-# CSAF-VEX Beta Details
+# CSAF-VEX GA Details
 
-This document is intended to cover the changes made in the new release of beta VEX files compared to the legacy VEX files. These changes are broken out by the three main CSAF VEX document sections: Document, Product Tree and Vulnerabilities. 
+This document is intended to cover the changes made in the new release of GA VEX files compared to the legacy VEX files. These changes are broken out by the three main CSAF VEX document sections: Document, Product Tree and Vulnerabilities. 
 
-++Please Note:++ The beta VEX files may experience minor changes as we address any final known issues. We aim to keep this documentation in sync with the changes, but there may be times when the documentation and implementation are not aligned. If you have questions on any of these changes, please see [How to Provide Feedback](https://redhatproductsecurity.github.io/security-data-guidelines/vex-beta-details/#how-to-provide-feedback).
+++ Please Note: ++ The GA VEX files may experience minor changes as we address any final known issues. We aim to keep this documentation in sync with the changes, but there may be times when the documentation and implementation are not aligned. If you have questions on any of these changes, please see [How to Provide Feedback](https://redhatproductsecurity.github.io/security-data-guidelines/vex-GA-details/#how-to-provide-feedback).
 
 ## Document Section
 
-The new beta VEX files include a few minor changes to the `document` section, outlined in the sections below. 
+The new GA VEX files include a few minor changes to the `document` section, outlined in the sections below. 
 
 ### Document Changes
 
 #### Title
 
-Previously, the `document.title` followed the format component:CVE title. The title in the beta VEX files removed the component prefix. This decision was made to simplify the title and remove confusion when a CVE affects multiple components. 
+Previously, the `document.title` followed the format component:CVE title. The title in the GA VEX files removed the component prefix. This decision was made to simplify the title and remove confusion when a CVE affects multiple components. 
 
 ```json
 # Example of legacy VEX title 
@@ -20,15 +20,15 @@ Previously, the `document.title` followed the format component:CVE title. The ti
 ```
 
 ```json
-# Example of beta VEX title 
+# Example of GA VEX title 
 "title": "Integer overflow in memalign leads to heap corruption",
 ```
 
 #### Tracking
 
-The `document.tracking` object has two changes in the new beta VEX files: the generator name has changed and the revision history has been simplified.
+The `document.tracking` object has two changes in the new GA VEX files: the generator name has changed and the revision history has been simplified.
 
-In the new beta VEX files, the `document.tracking.generator.engine.name` now references the new service responsible for creating VEX files, "CSAF Generator". 
+In the new GA VEX files, the `document.tracking.generator.engine.name` now references the new service responsible for creating VEX files, "CSAF Generator". 
 
 ```json
 # Example of legacy VEX generator 
@@ -43,7 +43,7 @@ In the new beta VEX files, the `document.tracking.generator.engine.name` now ref
 ```
 
 ```json
-# Example of beta VEX generator 
+# Example of GA VEX generator 
 "generator": {
         "date": "2026-02-27T12:07:46+00:00",
         "engine": {
@@ -53,7 +53,7 @@ In the new beta VEX files, the `document.tracking.generator.engine.name` now ref
 },
 ```
 
-The `document.tracking.revision_history` has also been updated in the new beta VEX files. Previously, the revision history object implemented some logic to create a history of changes, which was neither accurate nor comprehensive of the historical changes to an individual VEX file. In the new beta VEX files, there will only be one revision that represents the last generated version. 
+The `document.tracking.revision_history` has also been updated in the new GA VEX files. Previously, the revision history object implemented some logic to create a history of changes, which was neither accurate nor comprehensive of the historical changes to an individual VEX file. In the new GA VEX files, there will only be one revision that represents the last generated version. 
 
 ```json
 # Example of legacy VEX revision history
@@ -77,7 +77,7 @@ The `document.tracking.revision_history` has also been updated in the new beta V
 ```
 
 ```json
-# Example of beta VEX revision history
+# Example of GA VEX revision history
 "revision_history": [
   {
     "date": "2026-02-27T12:07:46+00:00",
@@ -90,7 +90,7 @@ The `document.tracking.revision_history` has also been updated in the new beta V
 
 ### Removed Document Objects
 
-The following optional objects were removed from the `document` section and will not be present in the new beta VEX files:
+The following optional objects were removed from the `document` section and will not be present in the new GA VEX files:
 
 - `document.distribution`
 - `document.lang`
@@ -99,11 +99,11 @@ The following optional objects were removed from the `document` section and will
 
 ## Product Tree Section
 
-The `product_tree` section of VEX files includes the most significant changes between legacy VEX files and the new beta VEX files. 
+The `product_tree` section of VEX files includes the most significant changes between legacy VEX files and the new GA VEX files. 
 
 ### Branch Removal
 
-In the `product_tree` section of a VEX file, legacy VEX files used to nest `product_name` objects under `product_family` branches and `product_version` objects under `architecture` branches, depending on the fix status of each. The new beta VEX files remove any branch nesting. All `product_name` and `product_version` objects will only be nested under the parent `vendor` branch. 
+In the `product_tree` section of a VEX file, legacy VEX files used to nest `product_name` objects under `product_family` branches and `product_version` objects under `architecture` branches, depending on the fix status of each. The new GA VEX files remove any branch nesting. All `product_name` and `product_version` objects will only be nested under the parent `vendor` branch. 
 
 ```json
 # Example of legacy VEX branch nesting
@@ -135,7 +135,7 @@ In the `product_tree` section of a VEX file, legacy VEX files used to nest `prod
 ```
 
 ```json
-# Example of beta VEX branch nesting
+# Example of GA VEX branch nesting
  "branches": [
   {
     "category": "vendor",
@@ -159,11 +159,11 @@ In the `product_tree` section of a VEX file, legacy VEX files used to nest `prod
 
 ### Product Changes
 
-The new beta VEX files include three notable changes to product representation: products are now always represented with a minor version, the product naming convention has been modified for improved consistency and product variants have been eliminated for simplicity. 
+The new GA VEX files include three notable changes to product representation: products are now always represented with a minor version, the product naming convention has been modified for improved consistency and product variants have been eliminated for simplicity. 
 
 #### Product Granularity
 
-Previously, legacy VEX files only represented a product with a minor version when a fix was available. New beta VEX files include representation for any supported minor version, regardless of fix status. This change is intended to provide better affectedness information for each support version of a product that may be impacted by a vulnerability. 
+Previously, legacy VEX files only represented a product with a minor version when a fix was available. New GA VEX files include representation for any supported minor version, regardless of fix status. This change is intended to provide better affectedness information for each support version of a product that may be impacted by a vulnerability. 
 
 In the example for CVE-2026-0861, the [legacy VEX file](https://security.access.redhat.com/data/csaf/v2/vex/2026/cve-2026-0861.json) only includes a single `product_name` entry to represent the status of Red Hat Enterprise Linux 8. 
 
@@ -182,10 +182,10 @@ In the example for CVE-2026-0861, the [legacy VEX file](https://security.access.
 }
 ```
 
-The [beta VEX file](https://security.access.redhat.com/data/csaf/v2/vex-feed/2026/cve-2026-0861.json) includes 5 `product_name` entries to represent the status of each supported version of Red Hat Enterprise Linux 8. 
+The [GA VEX file](https://security.access.redhat.com/data/csaf/v2/vex-feed/2026/cve-2026-0861.json) includes 5 `product_name` entries to represent the status of each supported version of Red Hat Enterprise Linux 8. 
 
 ```json
-# Example of beta VEX RHEL 8 product representation 
+# Example of GA VEX RHEL 8 product representation 
 {
   "category": "product_name",
   "name": "Red Hat Enterprise Linux 8.10.z",
@@ -245,12 +245,12 @@ The [beta VEX file](https://security.access.redhat.com/data/csaf/v2/vex-feed/202
 
 #### Product Naming
 
-Previously, legacy VEX files used different naming schemas based on the fix status of the product. The new beta VEX files has standardized on a naming schema to improve consistency of a product's representation throughout the entire lifecycle of a VEX file.  
+Previously, legacy VEX files used different naming schemas based on the fix status of the product. The new GA VEX files has standardized on a naming schema to improve consistency of a product's representation throughout the entire lifecycle of a VEX file.  
 
-By comparing the Openshift 4.18 in legacy VEX files for [CVE-2025-12801](https://security.access.redhat.com/data/csaf/v2/vex/2025/cve-2025-12801.json) and [CVE-2025-6176](https://security.access.redhat.com/data/csaf/v2/vex/2025/cve-2025-6176.json), you can see that the `product_id` changes format from "red_hat_openshift_container_platform_4" in an unfixed state to "9Base-RHOSE-4.18" in a fixed state. 
+By comparing the Openshift 4.18 in legacy VEX files for [CVE-2023-26819](https://security.access.redhat.com/data/csaf/v2/vex/2025/cve-2023-126819.json) and [CVE-2025-6176](https://security.access.redhat.com/data/csaf/v2/vex/2025/cve-2025-6176.json), you can see that the `product_id` changes format from "red_hat_openshift_container_platform_4" in an unfixed state to "9Base-RHOSE-4.18" in a fixed state. 
 
 ```json
-# Example of legacy VEX unfixed product name for CVE-2025-12801
+# Example of legacy VEX unfixed product name for CVE-2023-26819
 {
   "category": "product_name",
   "name": "Red Hat OpenShift Container Platform 4",
@@ -277,10 +277,10 @@ By comparing the Openshift 4.18 in legacy VEX files for [CVE-2025-12801](https:/
 }
 ```
 
-In new beta VEX files for [CVE-2025-12801](https://security.access.redhat.com/data/csaf/v2/vex-feed/2025/cve-2025-12801.json) and [CVE-2025-6176](https://security.access.redhat.com/data/csaf/v2/vex-feed/2025/cve-2025-6176.json), the `product_id` value remains the same between fixed and unfixed states. 
+In new GA VEX files for [CVE-2023-26819](https://security.access.redhat.com/data/csaf/v2/vex-feed/2023/cve-2023-26819.json) and [CVE-2025-6176](https://security.access.redhat.com/data/csaf/v2/vex-feed/2025/cve-2025-6176.json), the `product_id` value follows the same naming convention between fixed and unfixed states, only varying in the channel specifier. 
 
 ```json
-# Example of beta VEX unfixed product name for CVE-2025-12801
+# Example of GA VEX unfixed product name for CVE-2023-26819
 {
   "category": "product_name",
   "name": "OpenShift Container Platform 4.18",
@@ -293,78 +293,21 @@ In new beta VEX files for [CVE-2025-12801](https://security.access.redhat.com/da
   }
 }
 
-# Example of beta VEX fixed product name for CVE-2025-6176
+# Example of GA VEX fixed product name for CVE-2025-6176
 {
   "category": "product_name",
   "name": "OpenShift Container Platform 4.18",
   "product": {
     "name": "OpenShift Container Platform 4.18",
-    "product_id": "openshift-4.18",
+    "product_id": "openshift-4.18::el9",
     "product_identification_helper": {
-      "cpe": "cpe:/a:redhat:openshift:4.18"
+      "cpe": "cpe:/a:redhat:openshift:4.18::el9"
     }
   }
 },
 
 ```
 
-#### Product Variants
-
-The new beta VEX files change how multiple product variants are represented. For RHEL products, only the 'appstream' variant will be represented. For other products that are based on RHEL, the RHEL base version will be represented like '::el8'.
-
-```json
-# Example of legacy VEX product variants
-{
-  "category": "product_name",
-  "name": "Red Hat Enterprise Linux CodeReady Linux Builder (v. 9)",
-  "product": {
-    "name": "Red Hat Enterprise Linux CodeReady Linux Builder (v. 9)",
-    "product_id": "CRB-9.7.0.Z.MAIN",
-    "product_identification_helper": {
-      "cpe": "cpe:/a:redhat:enterprise_linux:9::crb"
-    }
-  }
-},
-{
-  "category": "product_name",
-  "name": "Red Hat Enterprise Linux AppStream (v. 9)",
-  "product": {
-    "name": "Red Hat Enterprise Linux AppStream (v. 9)",
-    "product_id": "AppStream-9.7.0.Z.MAIN",
-    "product_identification_helper": {
-      "cpe": "cpe:/a:redhat:enterprise_linux:9::appstream"
-    }
-  }
-},
-{
-  "category": "product_name",
-  "name": "Red Hat Enterprise Linux BaseOS (v. 9)",
-  "product": {
-    "name": "Red Hat Enterprise Linux BaseOS (v. 9)",
-    "product_id": "BaseOS-9.7.0.Z.MAIN",
-    "product_identification_helper": {
-      "cpe": "cpe:/o:redhat:enterprise_linux:9::baseos"
-    }
- }
-},
-
-```
-
-```json
-# Example of beta VEX product variants 
-{
-  "category": "product_name",
-  "name": "Red Hat Enterprise Linux 9.7.z",
-  "product": {
-    "name": "Red Hat Enterprise Linux 9.7.z",
-    "product_id": "rhel-9.7.z::appstream",
-    "product_identification_helper": {
-      "cpe": "cpe:/a:redhat:enterprise_linux:9::appstream"
-    }
-  }
-},
-
-```
 
 ### Component Changes
 
@@ -372,7 +315,7 @@ In additon to the product representation changes, there are a few changes to com
 
 #### Component Naming
 
-A minor change was made to the component naming in the new beta VEX files. The `product_version.name` and `product.name` fields for components will not include any version information, even when fixed in the new beta VEX files.
+A minor change was made to the component naming in the new GA VEX files. The `product_version.name` and `product.name` fields for components will not include any version information, even when fixed in the new GA VEX files. Additionally, epoch values will always be present in both the `product_id` and the `purl`.
 
 ```json
 # Example of legacy VEX component naming for unfixed component
@@ -403,7 +346,7 @@ A minor change was made to the component naming in the new beta VEX files. The `
 ```
 
 ```json
-# Example of beta VEX component naming for unfixed component 
+# Example of GA VEX component naming for unfixed component 
 {
   "category": "product_version",
   "name": "libxml2",
@@ -416,15 +359,15 @@ A minor change was made to the component naming in the new beta VEX files. The `
   }
 }
 
-# Example of beta VEX component naming for fixed component
+# Example of GA VEX component naming for fixed component
 {
   "category": "product_version",
   "name": "libxml2",
   "product": {
     "name": "libxml2",
-    "product_id": "libxml2-2.9.13-10.el9_6",
+    "product_id": "libxml2-0:2.9.13-10.el9_6.src",
     "product_identification_helper": {
-      "purl": "pkg:rpm/redhat/libxml2@2.9.13-10.el9_6?arch=src"
+      "purl": "pkg:rpm/redhat/libxml2@2.9.13-10.el9_6?arch=src&epoch=0"
     }
   }
 }
@@ -484,15 +427,15 @@ In legacy VEX files, fixed components were represented multiple times for their 
 ```
 
 ```json
-# Example of beta VEX component architecture 
+# Example of GA VEX component architecture 
 { 
   "category": "product_version", 
   "name": "glibc", 
   "product": { 
     "name": "glibc", 
-    "product_id": "glibc-0:2.34-231.el9_7.10", 
+    "product_id": "glibc-0:2.34-231.el9_7.10.src", 
     "product_identification_helper": { 
-      "purl": "pkg:rpm/redhat/glibc@2.34-231.el9_7.10?arch=src" 
+      "purl": "pkg:rpm/redhat/glibc@2.34-231.el9_7.10?arch=src&epoch=0" 
     } 
   }
 }, 
@@ -501,19 +444,19 @@ In legacy VEX files, fixed components were represented multiple times for their 
 
 #### Binary RPMs
 
-More information on binary RPMS will be available soon. Product Security is working to address this gap as soon as possible. 
+Binary RPM information is primarily available for Red Hat Hardened Images. Binary RPM information will start being available for newer CVEs soon. Product Security is actively working to address this gap as quickly as possible. 
 
 ## Vulnerabilities Section
 
-Finally, there were a few changes made the the `vulnerabilties` section of the new beta VEX files. 
+Finally, there were a few changes made the the `vulnerabilties` section of the new GA VEX files. 
 
 ### Remediations
 
-A minor change to the `vulnerabilites.remediations` object was included in the new beta VEX files. Product and component pairs that have a 'fixed' product status will no longer be listed under a `category: workaround` remediation object. Fixed product and componets will only be listed under a `category: vendor_fix` remediation object. 
+A minor change to the `vulnerabilites.remediations` object was included in the new GA VEX files. Product and component pairs that have a 'fixed' product status will no longer be listed under a `category: workaround` remediation object. Fixed product and componets will only be listed under a `category: vendor_fix` remediation object. 
 
 ### CVSS Score
 
-The new beta VEX files simplify the representation of CVSS scores by eliminating the individual metrics, which are still represented in the `vectorString`.  
+The new GA VEX files simplify the representation of CVSS scores by eliminating the individual metrics, which are still represented in the `vectorString`.  
 
 ```json
 # Example of legacy VEX CVSS scores
@@ -534,7 +477,7 @@ The new beta VEX files simplify the representation of CVSS scores by eliminating
 ```
 
 ```json
-# Example of beta VEX CVSS scores
+# Example of GA VEX CVSS scores
 "cvss_v3": {
   "version": "3.1",
   "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
