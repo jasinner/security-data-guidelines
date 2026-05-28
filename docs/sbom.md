@@ -642,6 +642,70 @@ graph TD
     D -->|GENERATED_FROM| C
 ```
 
+##### Bundled dependencies
+
+Some RPM spec files declare copylib or vendored components using `Provides: bundled(...)` or
+`Provides: golang(...)`. These are recorded on binary subpackage RPM headers (for example
+`vim-enhanced` may provide `bundled(libvterm)`), not on the SRPM itself. Collect them from
+Koji `getRPMDeps` Provides (type `1`) across every RPM in the build.
+
+Each bundled component should be represented as its own package object, linked to the SRPM with
+a `DEPENDENCY_OF` relationship (the bundled package is a dependency of the SRPM build). Set
+`primaryPackagePurpose` to `LIBRARY`, `downloadLocation` to `NOASSERTION`, and `filesAnalyzed`
+to `false`.
+
+Use a typed purl when the provide name indicates the ecosystem:
+
+| Language prefix in provide | purl type | Example provide | Example purl |
+|----------------------------|-----------|-----------------|--------------|
+| *(none)* / generic bundled | `generic` | `bundled(libvterm)` | `pkg:generic/libvterm` |
+| `golang(...)` | `golang` | `golang(github.com/foo/bar)` | `pkg:golang/github.com/foo/bar@1.2.3` |
+| `bundled(python(...))` | `pypi` | `bundled(python(requests))` | `pkg:pypi/requests@2.31.0` |
+| `bundled(nodejs(...))` | `npm` | `bundled(nodejs(lodash))` | `pkg:npm/lodash@4.17.21` |
+| `bundled(ruby(...))` | `gem` | `bundled(ruby(rake))` | `pkg:gem/rake@13.0.6` |
+| `bundled(crate(...))` | `cargo` | `bundled(crate(serde))` | `pkg:cargo/serde@1.0.0` |
+| `bundled(mvn(...))` | `maven` | `bundled(mvn(org/foo))` | `pkg:maven/org/foo@1.0.0` |
+
+=== "SPDX 2.3"
+
+    ```json
+    {
+      "SPDXID": "SPDXRef-Bundled-11cdd6f19dc1",
+      "name": "libvterm (generic)",
+      "versionInfo": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "primaryPackagePurpose": "LIBRARY",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:generic/libvterm"
+        }
+      ]
+    }
+    ```
+
+=== "SPDX 2.3"
+
+    ```json
+    {
+      "spdxElementId": "SPDXRef-Bundled-11cdd6f19dc1",
+      "relationshipType": "DEPENDENCY_OF",
+      "relatedSpdxElement": "SPDXRef-SRPM"
+    }
+    ```
+
+**Example:** the build-time SBOM for `vim-9.1.083-5.el10` includes `bundled(libvterm)` from
+the `vim-enhanced` subpackage:
+[build/vim-9.1.083-5.el10](https://github.com/RedHatProductSecurity/security-data-guidelines/blob/main/sbom/examples/rpm/build/vim-9.1.083-5.el10.spdx.json).
+
+Bundled components declared in the spec are distinct from:
+
+- **Source archives** (`Source0`, `Source1`, …), which are linked with `CONTAINS` from the SRPM.
+- **Components discovered by scanning** an unpacked source tree (for example with Syft), which
+  are nested under the relevant source archive.
+
 #### Product
 
 Individual components such as packages and container images are almost always provided as part of a specific product.

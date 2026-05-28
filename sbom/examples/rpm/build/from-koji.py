@@ -4,9 +4,16 @@ import os
 import re
 import subprocess
 import sys
-import koji
 from copy import deepcopy
 from tempfile import TemporaryDirectory
+
+import koji
+from bundled_provides import (
+    RpmDep,
+    bundled_golang_from_provides,
+    bundled_provides_to_cdx_components,
+    bundled_provides_to_spdx_fragments,
+)
 
 # Script requires these RPMs: brewkoji, rpmdevtools, rpm-build
 # Run with: ./from-koji.py brew <NVR>
@@ -98,6 +105,39 @@ class SBOMBuilder:
             for chunk in iter(lambda: f.read(4096), b""):
                 h.update(chunk)
         return h.hexdigest()
+
+    @staticmethod
+    def get_build_provides(build_id):
+        """Collect Provides (type 1) from every RPM in a Koji build."""
+        build = SESSION.getBuild(build_id)
+        provides = []
+        for rpm in SESSION.listBuildRPMs(build["id"]):
+            rpm_id = rpm.get("id")
+            if not rpm_id:
+                continue
+            for dep in SESSION.getRPMDeps(rpm_id):
+                if dep.get("type") != 1:
+                    continue
+                provides.append(
+                    RpmDep(
+                        name=str(dep.get("name") or ""),
+                        version=str(dep.get("version") or ""),
+                        dep_type=1,
+                    )
+                )
+        return provides
+
+    def add_bundled_provides(self, build_id):
+        """Add bundled()/golang() provides as DEPENDENCY_OF packages linked to the SRPM."""
+        bundled_deps = bundled_golang_from_provides(self.get_build_provides(build_id))
+        if not bundled_deps:
+            return []
+        packages, rels = bundled_provides_to_spdx_fragments(
+            bundled_deps, srpm_spdx_id="SPDXRef-SRPM"
+        )
+        self.spdx_packages.extend(packages)
+        self.spdx_relationships.extend(rels)
+        return bundled_provides_to_cdx_components(bundled_deps)
 
     def run_syft_spdx(self, builddir):
         syft = subprocess.run(
@@ -515,6 +555,8 @@ class SBOMBuilder:
                 self.spdx_packages.append(package)
                 self.cdx_components.append(create_cdx_from_spdx(package))
 
+        bundled_cdx_components = self.add_bundled_provides(build_id)
+
         spdx = {
             "spdxVersion": "SPDX-2.3",
             "dataLicense": "CC0-1.0",
@@ -553,17 +595,27 @@ class SBOMBuilder:
 
         copy_of_cdx_root["pedigree"] = {"ancestors": cdx_pedigrees}
         self.cdx_components.append(copy_of_cdx_root)
+        for bundled_component in bundled_cdx_components:
+            if bundled_component.get("version") is None:
+                bundled_component.pop("version", None)
+            self.cdx_components.append(bundled_component)
         cdx["components"] = sorted(self.cdx_components, key=lambda c: c["purl"])
 
         binary_rpm_purls = set()
         for cdx_component in self.cdx_components:
             if cdx_component["bom-ref"] == copy_of_cdx_root["bom-ref"]:
                 continue
-            binary_rpm_purls.add(cdx_component["purl"])
+            if cdx_component["bom-ref"].startswith("pkg:rpm/"):
+                binary_rpm_purls.add(cdx_component["purl"])
 
-        cdx["dependencies"] = [
-            {"ref": copy_of_cdx_root["bom-ref"], "provides": sorted(list(binary_rpm_purls))}
-        ]
+        srpm_dep = {
+            "ref": copy_of_cdx_root["bom-ref"],
+            "provides": sorted(list(binary_rpm_purls)),
+        }
+        bundled_refs = sorted(c["bom-ref"] for c in bundled_cdx_components)
+        if bundled_refs:
+            srpm_dep["dependsOn"] = bundled_refs
+        cdx["dependencies"] = [srpm_dep]
 
         with open(f"{build_id}.spdx.json", "w") as fp:
             # Add an extra newline at the end since a lot of editors add one when you save a file,

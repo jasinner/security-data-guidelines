@@ -1940,11 +1940,20 @@
           }
         ]
       }
+    },
+    {
+      "bom-ref": "pkg:generic/libvterm",
+      "type": "library",
+      "name": "libvterm (generic)",
+      "purl": "pkg:generic/libvterm"
     }
   ],
   "dependencies": [
     {
       "ref": "pkg:rpm/redhat/vim@9.1.083-5.el10?arch=src&epoch=2",
+      "dependsOn": [
+        "pkg:generic/libvterm"
+      ],
       "provides": [
         "pkg:rpm/redhat/vim-X11-debuginfo@9.1.083-5.el10?arch=aarch64&epoch=2",
         "pkg:rpm/redhat/vim-X11-debuginfo@9.1.083-5.el10?arch=ppc64le&epoch=2",

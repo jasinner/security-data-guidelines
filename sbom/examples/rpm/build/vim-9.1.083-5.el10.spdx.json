@@ -69,6 +69,21 @@
       ]
     },
     {
+      "SPDXID": "SPDXRef-Bundled-11cdd6f19dc1",
+      "name": "libvterm (generic)",
+      "versionInfo": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "primaryPackagePurpose": "LIBRARY",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:generic/libvterm"
+        }
+      ]
+    },
+    {
       "SPDXID": "SPDXRef-aarch64-vim-X11-debuginfo",
       "name": "vim-X11-debuginfo",
       "versionInfo": "9.1.083-5.el10",
@@ -1735,6 +1750,11 @@
       "spdxElementId": "SPDXRef-SRPM",
       "relationshipType": "CONTAINS",
       "relatedSpdxElement": "SPDXRef-Source0"
+    },
+    {
+      "spdxElementId": "SPDXRef-Bundled-11cdd6f19dc1",
+      "relationshipType": "DEPENDENCY_OF",
+      "relatedSpdxElement": "SPDXRef-SRPM"
     },
     {
       "spdxElementId": "SPDXRef-aarch64-vim-X11-debuginfo",
