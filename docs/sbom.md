@@ -448,7 +448,7 @@ Container Images are also linked to one or more upstream sources that were used 
         {
           "referenceCategory": "PACKAGE-MANAGER",
           "referenceType": "purl",
-          "referenceLocator": "pkg:generic/kernel-model-management@d027509b6861d8a9f923cc99dd3e15d9b209e63e?download_url=https://github.com/rh-ecosystem-edge/kernel-module-management#d027509b6861d8a9f923cc99dd3e15d9b209e63e"
+          "referenceLocator": "pkg:github/rh-ecosystem-edge/kernel-module-management@d027509b6861d8a9f923cc99dd3e15d9b209e63e"
         }
       ]
     },
@@ -598,8 +598,25 @@ source can be represented by a package object using the following data:
 purl identifiers
 :   In cases where the upstream source is a package in a registry such as PyPI or NPM, the purl identifier will use
     the respective package type. For components that are distributed as standalone bundles (such as OpenSSL in the
-    example above), `generic` purls should be used with an exact download URL from where a specific bundle of source
-    code was fetched from, including a checksum (which should also be specified in the `checksums` field).
+    example above), use `generic` purls with an exact download URL from where a specific bundle of source code was
+    fetched from, including a checksum (which should also be specified in the `checksums` field). When the source
+    `downloadLocation` is a `github.com` URL, use the [`github` purl type](https://github.com/package-url/purl-spec/blob/main/types-doc/github-definition.md)
+    and emit `pkg:github/<owner>/<repo>@<version>` only — do not also emit a `generic` purl whose `download_url`
+    points at the same GitHub location. When a separate non-GitHub fetch URL is also known (for example an upstream
+    tarball mirror alongside a GitHub repository), add a second purl:
+    `pkg:generic/<source-name>@<version>?download_url=...` (and `checksum=...` when known).
+
+    Example for a GitHub-hosted source archive (`delve` `Source0`):
+
+    ```json
+    "externalRefs": [
+      {
+        "referenceCategory": "PACKAGE-MANAGER",
+        "referenceType": "purl",
+        "referenceLocator": "pkg:github/go-delve/delve@1.7.2"
+      }
+    ]
+    ```
 
 To associate a set of source archives with the SRPM that includes them, use:
 

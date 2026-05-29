@@ -112,6 +112,43 @@ def _bundled_purl(dep: BundledDep) -> str:
     return _bundled_purls(dep)[0]
 
 
+def source_purls(
+    name: str,
+    version: str,
+    download_url: str,
+    *,
+    checksum: str = "",
+) -> list[str]:
+    """Return one or more purls for an upstream source archive (``Source0``, ``Source-origin``, …)."""
+    ver = f"@{version}" if version else ""
+    github_coords = _github_owner_repo(download_url)
+
+    if github_coords:
+        owner, repo = github_coords
+        return [f"pkg:github/{owner}/{repo}{ver}"]
+
+    base = f"pkg:generic/{name}{ver}"
+    qualifiers: list[str] = []
+    if download_url:
+        qualifiers.append(f"download_url={quote(download_url, safe='')}")
+    if checksum:
+        qualifiers.append(f"checksum={checksum}")
+    if qualifiers:
+        return [f"{base}?{'&'.join(qualifiers)}"]
+    return [base]
+
+
+def source_purl(
+    name: str,
+    version: str,
+    download_url: str,
+    *,
+    checksum: str = "",
+) -> str:
+    """Primary purl for a source archive (first entry from ``source_purls``)."""
+    return source_purls(name, version, download_url, checksum=checksum)[0]
+
+
 def _bundled_display_lang(dep: BundledDep) -> str:
     if dep.lang != "generic":
         return dep.lang
